@@ -1,0 +1,21 @@
+@url=http://localhost:5000
+@suffix=api/v1
+
+GET {{url}}
+
+###
+GET {{url}}/{{suffix}}/users?email=nguyenvana@gmail.com
+# GET {{url}}/{{suffix}}/users?searchTerm=nu
+
+###
+POST {{url}}/{{suffix}}/users/add
+Content-Type: application/json
+
+{
+  "full_name" : "Rimon",
+  "phone_number":"0123456789",
+  "email":"Rimon@gmail.com",
+  "role": "admin",
+  "password" :"123456789",
+  "confirm_password" :"123456789"
+}

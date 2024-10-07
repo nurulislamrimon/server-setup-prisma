@@ -1,0 +1,56 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  // binaryTargets = ["native", "debian-openssl-1.1.x"]
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// user model
+
+// while creating a new model make sure added the model to the IModelMapping else filter and search will not work
+model User {
+  id               Int       @id @default(autoincrement())
+  full_name        String
+  phone_number     String
+  email            String    @unique
+  role             Role      @default(user)
+  password         String
+  confirm_password String
+  address          String?
+  // dates
+  created_at       DateTime  @default(now())
+  updated_at       DateTime  @updatedAt
+  deleted_at       DateTime?
+}
+
+// role enum
+enum Role {
+  user
+  admin
+  super_admin
+}
+
+// help model
+model Help_request {
+  id                  Int       @id @default(autoincrement())
+  platform_name       String
+  client_name         String
+  phone_number        String
+  email               String
+  service_name        String
+  project_budget      String
+  project_description String
+  // dates
+  created_at          DateTime  @default(now())
+  updated_at          DateTime  @updatedAt
+  deleted_at          DateTime?
+}
