@@ -1,0 +1,22 @@
+@url=http://localhost:5000
+@suffix=api/v1
+
+GET {{url}}
+
+###
+GET {{url}}/{{suffix}}/users?email=nguyenvana@gmail.com
+
+
+###
+POST {{url}}/{{suffix}}/users/add
+Content-Type: application/json
+
+{
+  "full_name" : "Nguyen Van A",
+#   "phone_number":"0123456789",
+#   "email":"nguyenvana@gmail.com",
+  "role":             "admin",
+  "password"    :"123456789",
+  "confirm_password" :"123456789"
+}
+
