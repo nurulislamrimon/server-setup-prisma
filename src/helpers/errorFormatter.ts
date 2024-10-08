@@ -1,19 +1,26 @@
 import { Prisma } from "@prisma/client";
 import { Request } from "express";
+import { ZodError, ZodIssue } from "zod";
 
-function formatPrismaError(error: any, req: Request) {
+// ------------------------------------------
+// format prisma error
+// ------------------------------------------
+export function formatPrismaError(error: any, req: Request) {
+  console.log("Full Prisma Error:", error);
+
   let messages = [];
-
-  // Handle Known Prisma Errors
   if (error instanceof Prisma.PrismaClientKnownRequestError) {
-    // Handle Missing Required Fields (like the one in your example)
     if (error.message.includes("Argument")) {
-      const match = error.message.match(/Argument `(.*?)` is missing/);
-      if (match) {
-        const fieldName = match[1]; // Get the field name (e.g., "phone_number")
-        messages.push({
-          path: fieldName,
-          message: `${fieldName.replace(/_/g, " ")} is required`,
+      const matches = [
+        ...error.message.matchAll(/Argument `(.*?)` is missing/g),
+      ];
+      if (matches.length > 0) {
+        matches.forEach((match) => {
+          const fieldName = match[1];
+          messages.push({
+            path: fieldName,
+            message: `${fieldName.replace(/_/g, " ")} is required`,
+          });
         });
       }
     }
@@ -30,12 +37,14 @@ function formatPrismaError(error: any, req: Request) {
         });
     }
   } else if (error instanceof Prisma.PrismaClientValidationError) {
-    const match = error.message.match(/Argument `(.*?)` is missing/);
-    if (match) {
-      const fieldName = match[1];
-      messages.push({
-        path: fieldName,
-        message: `${fieldName.replace(/_/g, " ")} is required`,
+    const matches = [...error.message.matchAll(/Argument `(.*?)` is missing/g)];
+    if (matches.length > 0) {
+      matches.forEach((match) => {
+        const fieldName = match[1];
+        messages.push({
+          path: fieldName,
+          message: `${fieldName.replace(/_/g, " ")} is required`,
+        });
       });
     } else {
       messages.push({
@@ -44,15 +53,26 @@ function formatPrismaError(error: any, req: Request) {
       });
     }
   } else {
-    // Fallback for general errors
     messages.push({
       path: req.originalUrl,
       message: error?.message || "An unknown error occurred",
     });
   }
-
-  // Return formatted errors
   return { errorMessages: messages };
 }
 
-export default formatPrismaError;
+// ------------------------------------------
+// format zod error
+// ------------------------------------------
+export const formatZodError = (error: ZodError) => {
+  const errors = error.issues.map((issue: ZodIssue) => {
+    return {
+      path: issue?.path[issue.path.length - 1],
+      message: issue?.message,
+    };
+  });
+
+  return {
+    errorMessages: errors,
+  };
+};

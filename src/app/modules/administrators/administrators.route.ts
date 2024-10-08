@@ -14,11 +14,19 @@ router.get(
   ),
   administratorController.getAllAdministrators
 );
+
 router.post(
   "/add",
   authorization(administratorRoles.SUPER_ADMIN, administratorRoles.ADMIN),
   administratorController.addAdministrator
 );
+
+router.post(
+  "/update",
+  authentication,
+  administratorController.updateAdministrator
+);
+
 router.post("/login", administratorController.login);
 
 export const administratorRoute = router;

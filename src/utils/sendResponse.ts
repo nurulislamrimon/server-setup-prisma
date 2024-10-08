@@ -10,8 +10,8 @@ interface ISendResponseProps<T> {
   errorMessages?: IErrorMessages[];
 }
 
-interface IErrorMessages {
-  path: string;
+export interface IErrorMessages {
+  path: string | number;
   message: string;
 }
 

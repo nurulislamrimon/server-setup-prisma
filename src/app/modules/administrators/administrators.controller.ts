@@ -78,6 +78,52 @@ const addAdministrator: RequestHandler = catchAsync(async (req, res) => {
 });
 
 /**
+ *@api{POST}/update POST Request.
+ *@apiDescription This is a POST request for /update api.
+ *@apiPermission Admin
+ *@apiHeader accessToken
+ *@apiBody Object - administrator data
+ *@apiParam none
+ *@apiQuery none,
+ *@apiSuccess Object - administrator data
+ *@apiError 401 unauthorized or 401 or 403 forbidden or 404 not found
+ */
+
+const updateAdministrator: RequestHandler = catchAsync(async (req, res) => {
+  const user = req.user;
+  const newAdministrator = req.body;
+  const isAlreadyExist = await administratorService.getAnAdministrator({
+    where: { email: user?.email },
+  });
+
+  if (!isAlreadyExist) {
+    throw new ApiError(404, "User not found!");
+  }
+  if (newAdministrator?.password) {
+    newAdministrator.password = await bcrypt.hash(
+      newAdministrator.password,
+      10
+    );
+  }
+  // hash the password
+  const result = await administratorService.updateAdministrators({
+    where: { email: user?.email },
+    data: newAdministrator,
+  });
+  if (!result) {
+    throw new ApiError(404, "Something went wrong");
+  }
+  const { password, ...rest } = result;
+  sendResponse<Partial<Administrator>>({
+    res,
+    success: true,
+    message: "Administrators added successfully!",
+    data: rest,
+    statusCode: 200,
+  });
+});
+
+/**
  *@api{POST}/login POST Request.
  *@apiDescription This is a POST request for /login api.
  *@apiPermission none
@@ -144,4 +190,5 @@ export const administratorController = {
   getAllAdministrators,
   addAdministrator,
   login,
+  updateAdministrator,
 };

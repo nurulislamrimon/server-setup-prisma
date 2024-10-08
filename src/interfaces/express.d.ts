@@ -1,5 +1,5 @@
 declare module Express {
   interface Request {
-    user: JwtPayload | null;
+    user: { email: string; role: string };
   }
 }

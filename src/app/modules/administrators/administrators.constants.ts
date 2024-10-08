@@ -1,11 +1,21 @@
 import { Administrator, Prisma } from "@prisma/client";
 
 export const administratorFilterableFields: (keyof Administrator)[] = [
+  "id",
   "full_name",
+  "phone_number",
+  "email",
+  "role",
+  "address",
+  "created_at",
+  "updated_at",
+  "deleted_at",
 ];
 export const administratorSearchableFields: (keyof Administrator)[] = [
   "full_name",
+  "phone_number",
   "email",
+  "address",
 ];
 
 // ------------------------------------

@@ -14,7 +14,10 @@ export const authentication = (
       throw new ApiError(403, "Access forbidden!");
     }
     //   verify accessToken
-    const payload = verifyToken(accessToken, config.accessTokenSecret);
+    const payload = verifyToken(accessToken, config.accessTokenSecret) as {
+      email: string;
+      role: string;
+    };
     req.user = payload;
     next();
   } catch (error) {

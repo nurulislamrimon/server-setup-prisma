@@ -1,6 +1,6 @@
 @url=http://localhost:5000
 @suffix=api/v1
-@accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5pcmltb25AZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzI4MzczNTg1LCJleHAiOjE3Mjg0NTk5ODV9.1dM3n5DZKb4ayJ1MXfFS8KGpRqNxet-IAIOhrsNDOvs
+@accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiZW1haWwiOiJuaUBnbWFpbC5jb20iLCJyb2xlIjoic3VwZXJfYWRtaW4iLCJpYXQiOjE1MTYyMzkwMjJ9.YNA58vj_f6rN_dxxCIkULJLE2KIqLyVLCfclD9HF4E8
 
 GET {{url}}
 
@@ -8,11 +8,15 @@ GET {{url}}
 GET {{url}}/{{suffix}}/administrators?email=nguyenvana@gmail.com
 authorization: bearer {{accessToken}}
 
-# GET {{url}}/{{suffix}}/users?searchTerm=nu
+
+# -----------------
+# user model
+# -----------------
 
 ###
 POST {{url}}/{{suffix}}/administrators/add
 Content-Type: application/json
+Authorization: bearer {{accessToken}}
 
 {
   "full_name" : "Rimon",
@@ -23,10 +27,45 @@ Content-Type: application/json
 }
 
 ###
+POST {{url}}/{{suffix}}/administrators/update
+Content-Type: application/json
+authorization: bearer {{accessToken}}
+
+{
+  "full_name" : "Nurul I"
+}
+
+###
 POST {{url}}/{{suffix}}/administrators/login
 Content-Type: application/json
 
 {
-  "email":"nirimon@gmail.com",
-  "password" :"123456789"
+  "email":"ni@gmail.com",
+  "password" :"nur"
 }
+
+# -----------------
+# help request model
+# -----------------
+###
+GET  {{url}}/{{suffix}}/help-request?budget_min=400
+Content-Type: application/json
+Authorization: bearer {{accessToken}}
+
+###
+POST {{url}}/{{suffix}}/help-request/add
+Content-Type: application/json
+
+{
+  "platform_name": "Elite Commerce",
+  "client_name": "Nurul Islam Rimon",
+  "phone_number": "01710000000",
+  "email": "nirimonbd@gmail.com",
+  # "budget_min": 400,
+  # "budget_max": 500,
+  "project_description": "This will be the best project if you want!"
+}
+###
+DELETE {{url}}/{{suffix}}/help-request/1
+Content-Type: application/json
+Authorization: bearer {{accessToken}}

@@ -1,6 +1,7 @@
 import { ErrorRequestHandler, RequestHandler } from "express";
-import { sendResponse } from "../utils/sendResponse";
-import formatPrismaError from "../helpers/errorFormatter";
+import { IErrorMessages, sendResponse } from "../utils/sendResponse";
+import { formatPrismaError, formatZodError } from "../helpers/errorFormatter";
+import { ZodError } from "zod";
 
 export const notFoundRouteHandler: RequestHandler = (req, res, next) => {
   next({ message: "Route not found", statusCode: 404 });
@@ -15,14 +16,20 @@ export const globalErrorHandler: ErrorRequestHandler = (
 ) => {
   // if headers sended then return next(error);
   if (res.headersSent) return;
-  let errorMessages = [{ path: req.originalUrl, message: error?.message }];
-  if (
-    error?.name === "PrismaClientValidationError" ||
-    error?.name === "PrismaClientKnownRequestError" ||
-    error?.name === "PrismaClientUnKnownRequestError"
-  ) {
-    const simplifiedError = formatPrismaError(error, req);
-    errorMessages = simplifiedError?.errorMessages;
+  let errorMessages: IErrorMessages[] = [
+    { path: req.originalUrl, message: error?.message },
+  ];
+  // if (
+  //   error?.name === "PrismaClientValidationError" ||
+  //   error?.name === "PrismaClientKnownRequestError" ||
+  //   error?.name === "PrismaClientUnKnownRequestError"
+  // ) {
+  //   const simplifiedError = formatPrismaError(error, req);
+  //   errorMessages = simplifiedError?.errorMessages;
+  // } else
+  if (error instanceof ZodError) {
+    const simplifiedError = formatZodError(error);
+    errorMessages = simplifiedError.errorMessages;
   }
 
   sendResponse({

@@ -3,7 +3,8 @@ import { config } from "../config";
 
 // prisma client
 const prisma = new PrismaClient({
-  log: config.env === "production" ? [] : ["query", "info", "warn", "error"],
+  // log: config.env === "production" ? [] : ["query", "info", "warn", "error"],
+  log: [],
 });
 
 export default prisma;

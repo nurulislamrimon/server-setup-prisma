@@ -7,6 +7,7 @@ import {
   administratorSearchableFields,
   administratorSelectedFields,
 } from "./administrators.constants";
+import { DefaultArgs } from "@prisma/client/runtime/library";
 
 // -----------------------------
 // get all administrators
@@ -56,9 +57,20 @@ const getAnAdministrator = async (query: Prisma.AdministratorFindFirstArgs) => {
   return administrators;
 };
 
+// -----------------------------
+// update an administrator
+// -----------------------------
+const updateAdministrators = async (
+  data: Prisma.AdministratorUpdateArgs<DefaultArgs>
+) => {
+  const administrators = await prisma.administrator.update(data);
+  return administrators;
+};
+
 // export
 export const administratorService = {
   getAllAdministrators,
   addAdministrators,
   getAnAdministrator,
+  updateAdministrators,
 };
