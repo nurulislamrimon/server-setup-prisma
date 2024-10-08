@@ -1,21 +1,32 @@
 @url=http://localhost:5000
 @suffix=api/v1
+@accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5pcmltb25AZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzI4MzczNTg1LCJleHAiOjE3Mjg0NTk5ODV9.1dM3n5DZKb4ayJ1MXfFS8KGpRqNxet-IAIOhrsNDOvs
 
 GET {{url}}
 
 ###
-GET {{url}}/{{suffix}}/users?email=nguyenvana@gmail.com
+GET {{url}}/{{suffix}}/administrators?email=nguyenvana@gmail.com
+authorization: bearer {{accessToken}}
+
 # GET {{url}}/{{suffix}}/users?searchTerm=nu
 
 ###
-POST {{url}}/{{suffix}}/users/add
+POST {{url}}/{{suffix}}/administrators/add
 Content-Type: application/json
 
 {
   "full_name" : "Rimon",
   "phone_number":"0123456789",
-  "email":"Rimon@gmail.com",
+  "email":"nirimon@gmail.com",
   "role": "admin",
-  "password" :"123456789",
-  "confirm_password" :"123456789"
+  "password" :"123456789"
+}
+
+###
+POST {{url}}/{{suffix}}/administrators/login
+Content-Type: application/json
+
+{
+  "email":"nirimon@gmail.com",
+  "password" :"123456789"
 }

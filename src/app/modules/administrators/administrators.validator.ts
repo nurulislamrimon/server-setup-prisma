@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const userValidate = z
+export const administratorValidate = z
   .object({
     body: z.object({
       email: z

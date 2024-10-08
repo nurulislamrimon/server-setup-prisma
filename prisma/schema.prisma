@@ -14,27 +14,27 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// user model
+// administrator model
 
 // while creating a new model make sure added the model to the IModelMapping else filter and search will not work
-model User {
-  id               Int       @id @default(autoincrement())
-  full_name        String
-  phone_number     String
-  email            String    @unique
-  role             Role      @default(user)
-  password         String
-  confirm_password String
-  address          String?
+model Administrator {
+  id           Int       @id @default(autoincrement())
+  full_name    String
+  phone_number String
+  email        String    @unique
+  role         Role      @default(user)
+  password     String
+  address      String?
   // dates
-  created_at       DateTime  @default(now())
-  updated_at       DateTime  @updatedAt
-  deleted_at       DateTime?
+  created_at   DateTime  @default(now())
+  updated_at   DateTime  @updatedAt
+  deleted_at   DateTime?
 }
 
 // role enum
 enum Role {
   user
+  manager
   admin
   super_admin
 }

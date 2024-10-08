@@ -15,7 +15,6 @@ async function main() {
       console.log(`Example app listening on port ${port}`);
     });
   } catch (error) {
-    console.error("Error starting server:", error);
     await prisma.$disconnect();
     process.exit(1);
   }
@@ -40,15 +39,15 @@ const gracefulShutdown = async (exitCode: number = 0) => {
 };
 
 // Handle uncaught exceptions
-process.on("uncaughtException", async (err) => {
+process.on("uncaughtException", (err) => {
   console.error("Uncaught exception:", err);
-  await gracefulShutdown(1);
+  gracefulShutdown(1);
 });
 
 // Handle unhandled rejections
-process.on("unhandledRejection", async (reason, promise) => {
+process.on("unhandledRejection", (reason, promise) => {
   console.error("Unhandled Rejection at:", promise, "reason:", reason);
-  await gracefulShutdown(1);
+  gracefulShutdown(1);
 });
 
 // Handle SIGINT and SIGTERM signals for graceful termination

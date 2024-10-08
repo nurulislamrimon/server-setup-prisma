@@ -4,6 +4,9 @@ dotenv.config({ path: process.cwd() + "/.env" });
 
 //  exports from "./config";
 export const config = {
+  env: process.env.NODE_ENV,
   port: process.env.PORT,
   databaseUrl: process.env.DATABASE_URL,
+  accessTokenSecret: process.env.ACCESS_TOKEN_SECRET!,
+  refreshTokenSecret: process.env.REFRESH_TOKEN_SECRET!,
 };
